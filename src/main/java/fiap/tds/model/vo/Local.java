@@ -5,15 +5,15 @@ public class Local {
     private String nome;
     private String categoria;
     private String logradouro;
-    private int cep;
+    private String cep;
     private String cidade;
     private String estado;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
 
     public Local(){}
 
-    public Local(int id, String nome, String categoria, String logradouro, int cep, String cidade, String estado, String latitude, String longitude) {
+    public Local(int id, String nome, String categoria, String logradouro, String cep, String cidade, String estado, double latitude, double longitude) {
         this.id = id;
         this.nome = nome;
         this.categoria = categoria;
@@ -57,11 +57,11 @@ public class Local {
         this.logradouro = logradouro;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 
@@ -81,19 +81,19 @@ public class Local {
         this.estado = estado;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
