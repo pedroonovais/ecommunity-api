@@ -1,6 +1,5 @@
 package fiap.tds.resource;
 
-import fiap.tds.Tarefa;
 import fiap.tds.model.dao.LocalDAO;
 import fiap.tds.model.vo.Local;
 import jakarta.ws.rs.*;
@@ -63,6 +62,22 @@ public class LocalResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLocal(@PathParam("id") int id){
         boolean sucesso = dao.deletar(id);
+
+        Map<String, String> response = new HashMap<>();
+        if (sucesso){
+            response.put("status", "success");
+            return Response.ok(response).build();
+        } else{
+            response.put("status", "error");
+            return Response.status(Response.Status.NOT_FOUND).entity(response).build();
+        }
+    }
+
+    @Path("/atualizar")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response atualizarLocal(Local local){
+        boolean sucesso = dao.update(local);
 
         Map<String, String> response = new HashMap<>();
         if (sucesso){

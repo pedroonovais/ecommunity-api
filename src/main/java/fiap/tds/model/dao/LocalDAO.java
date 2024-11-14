@@ -3,10 +3,7 @@ package fiap.tds.model.dao;
 import fiap.tds.model.vo.Local;
 import fiap.tds.util.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class LocalDAO {
     private Connection getConnection() throws SQLException {
@@ -14,37 +11,42 @@ public class LocalDAO {
     }
 
     public int insert(Local local) {
-        int idLocal = -1;
-        String sql = "INSERT INTO tb_local " +
-                "(nome_local, categoria, logradouro_numero_local, cep_local, " +
-                "cidade_local, estado_local, latitude_local, longitude_local) " +
+        int generatedId = 0;
+
+        String sqlInsert = "INSERT INTO tb_local (nome_local, categoria, logradouro_numero_local, cep_local, cidade_local, estado_local, latitude_local, longitude_local) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sqlInsert)) {
 
-            // Definir os valores do PreparedStatement
             stmt.setString(1, local.getNome());
             stmt.setString(2, local.getCategoria());
             stmt.setString(3, local.getLogradouro());
-            stmt.setString(4, local.getCep());
+            stmt.setString(4, String.valueOf(local.getCep()));
             stmt.setString(5, local.getCidade());
             stmt.setString(6, local.getEstado());
-            stmt.setDouble(7, local.getLatitude());  // Latitude como double
-            stmt.setDouble(8, local.getLongitude()); // Longitude como double
+            stmt.setDouble(7, Double.parseDouble(String.valueOf(local.getLatitude())));
+            stmt.setDouble(8, Double.parseDouble(String.valueOf(local.getLongitude())));
 
             stmt.executeUpdate();
 
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
+            String sqlGetId = "SELECT MAX(id_local) AS maior_id FROM tb_local";
+            try (PreparedStatement stmtId = conn.prepareStatement(sqlGetId);
+                 ResultSet rs = stmtId.executeQuery()) {
+
                 if (rs.next()) {
-                    idLocal = rs.getInt(1);  // O primeiro índice é o id gerado
+                    generatedId = rs.getInt("maior_id");
+                } else {
+                    throw new SQLException("Falha ao obter ID do local.");
                 }
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Erro ao inserir o registro: " + e.getMessage());
         }
-        return idLocal;
+
+        System.out.println("Id que está sendo retornado: " + generatedId);
+        return generatedId;
     }
 
     public Local select(int id) {
@@ -71,7 +73,6 @@ public class LocalDAO {
         return null; // Retorna null caso nenhum registro seja encontrado
     }
 
-
     public boolean deletar(int id) {
         String sql = "DELETE FROM TB_LOCAL WHERE id_local = ?";
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -82,6 +83,33 @@ public class LocalDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean update(Local local) {
+        String sql = "UPDATE tb_local SET " +
+                "nome_local = ?, categoria = ?, logradouro_numero_local = ?, cep_local = ?, " +
+                "cidade_local = ?, estado_local = ?, latitude_local = ?, longitude_local = ? " +
+                "WHERE id_local = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, local.getNome());
+            stmt.setString(2, local.getCategoria());
+            stmt.setString(3, local.getLogradouro());
+            stmt.setString(4, String.valueOf(local.getCep()));
+            stmt.setString(5, local.getCidade());
+            stmt.setString(6, local.getEstado());
+            stmt.setDouble(7, Double.parseDouble(String.valueOf(local.getLatitude())));
+            stmt.setDouble(8, Double.parseDouble(String.valueOf(local.getLongitude())));
+            stmt.setInt(9, local.getId());
+            stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar o registro: " + e.getMessage());
+            return false;
+        }
     }
 
 }
