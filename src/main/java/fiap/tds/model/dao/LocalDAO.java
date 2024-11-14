@@ -4,6 +4,8 @@ import fiap.tds.model.vo.Local;
 import fiap.tds.util.DatabaseConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocalDAO {
     private Connection getConnection() throws SQLException {
@@ -44,8 +46,6 @@ public class LocalDAO {
         } catch (SQLException e) {
             System.err.println("Erro ao inserir o registro: " + e.getMessage());
         }
-
-        System.out.println("Id que está sendo retornado: " + generatedId);
         return generatedId;
     }
 
@@ -112,4 +112,28 @@ public class LocalDAO {
         }
     }
 
+    public List<Local> selectAll() {
+        String sql = "SELECT * FROM TB_LOCAL";
+        List<Local> locais = new ArrayList<>();
+
+        try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Local local = new Local();
+                local.setId(rs.getInt("id_local"));
+                local.setNome(rs.getString("nome_local"));
+                local.setCategoria(rs.getString("categoria"));
+                local.setLogradouro(rs.getString("logradouro_numero_local"));
+                local.setCep(rs.getString("cep_local"));
+                local.setCidade(rs.getString("cidade_local"));
+                local.setEstado(rs.getString("estado_local"));
+                local.setLatitude(rs.getFloat("latitude_local"));
+                local.setLongitude(rs.getFloat("longitude_local"));
+                locais.add(local);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return locais;
+    }
 }

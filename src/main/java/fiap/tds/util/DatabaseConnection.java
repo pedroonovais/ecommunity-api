@@ -18,7 +18,6 @@ public class DatabaseConnection {
             ods.setUser(USER);
             ods.setPassword(PASSWORD);
             this.conn = ods.getConnection();
-            System.out.println("Conexão com o banco de dados estabelecida.");
         } catch (SQLException e) {
             System.err.println("Erro ao conectar ao banco de dados: " + e.getMessage());
             throw e;
