@@ -38,8 +38,8 @@ public class LocalResource {
     public Response getLocal(@PathParam("id") int id){
         Local local = dao.select(id);
 
+        Map<String, String> response = new HashMap<>();
         if (local != null){
-            Map<String, String> response = new HashMap<>();
             response.put("status", "success");
             response.put("id", String.valueOf(local.getId()));
             response.put("nome", local.getNome());
@@ -52,7 +52,9 @@ public class LocalResource {
             response.put("longitude", String.valueOf(local.getLongitude()));
             return Response.ok(response).build();
         } else{
-            return Response.status(Response.Status.NOT_FOUND).entity("Usuário não encontrado").build();
+            response.put("status", "error");
+            response.put("msg", "Local não encontrado");
+            return Response.status(Response.Status.NOT_FOUND).entity(response).build();
         }
     }
 

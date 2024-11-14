@@ -48,12 +48,12 @@ public class LocalDAO {
     }
 
     public Local select(int id) {
-        Local local = new Local();
         String sql = "SELECT * FROM TB_LOCAL WHERE id_local = ?";
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                Local local = new Local();
                 local.setId(rs.getInt("id_local"));
                 local.setNome(rs.getString("nome_local"));
                 local.setCategoria(rs.getString("categoria"));
@@ -63,12 +63,14 @@ public class LocalDAO {
                 local.setEstado(rs.getString("estado_local"));
                 local.setLatitude(rs.getFloat("latitude_local"));
                 local.setLongitude(rs.getFloat("longitude_local"));
+                return local;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return local;
+        return null; // Retorna null caso nenhum registro seja encontrado
     }
+
 
     public boolean deletar(int id) {
         String sql = "DELETE FROM TB_LOCAL WHERE id_local = ?";
