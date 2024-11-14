@@ -60,23 +60,15 @@ public class LocalResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteLocal(@PathParam("id") int id){
-        Local local = dao.select(id);
+        boolean sucesso = dao.deletar(id);
 
-        if (local != null){
-            Map<String, String> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>();
+        if (sucesso){
             response.put("status", "success");
-            response.put("id", String.valueOf(local.getId()));
-            response.put("nome", local.getNome());
-            response.put("categoria", local.getCategoria());
-            response.put("logradouro", local.getLogradouro());
-            response.put("cep", local.getCep());
-            response.put("cidade", local.getCidade());
-            response.put("estado", local.getEstado());
-            response.put("latitude", String.valueOf(local.getLatitude()));
-            response.put("longitude", String.valueOf(local.getLongitude()));
             return Response.ok(response).build();
         } else{
-            return Response.status(Response.Status.NOT_FOUND).entity("Usuário não encontrado").build();
+            response.put("status", "error");
+            return Response.status(Response.Status.NOT_FOUND).entity(response).build();
         }
     }
 }

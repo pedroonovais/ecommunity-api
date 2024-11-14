@@ -50,8 +50,7 @@ public class LocalDAO {
     public Local select(int id) {
         Local local = new Local();
         String sql = "SELECT * FROM TB_LOCAL WHERE id_local = ?";
-        try (Connection connection = getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -69,6 +68,18 @@ public class LocalDAO {
             e.printStackTrace();
         }
         return local;
+    }
+
+    public boolean deletar(int id) {
+        String sql = "DELETE FROM TB_LOCAL WHERE id_local = ?";
+        try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.execute();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
