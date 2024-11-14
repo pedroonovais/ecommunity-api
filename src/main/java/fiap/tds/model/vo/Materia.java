@@ -7,7 +7,7 @@ public class Materia {
     private int idUsuario;
     private String tituloMateria;
     private String textoMateria;
-    private boolean ativo;
+    private String ativo;
     private LocalDateTime dtCriacao;
     private LocalDateTime dtUpdate;
 
@@ -15,7 +15,7 @@ public class Materia {
     public Materia() {}
 
     // Construtor com parâmetros
-    public Materia(int idMateria, int idUsuario, String tituloMateria, String textoMateria, boolean ativo, LocalDateTime dtCriacao, LocalDateTime dtUpdate) {
+    public Materia(int idMateria, int idUsuario, String tituloMateria, String textoMateria, String ativo, LocalDateTime dtCriacao, LocalDateTime dtUpdate) {
         this.idMateria = idMateria;
         this.idUsuario = idUsuario;
         this.tituloMateria = tituloMateria;
@@ -58,11 +58,11 @@ public class Materia {
         this.textoMateria = textoMateria;
     }
 
-    public boolean isAtivo() {
+    public String isAtivo() {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(String ativo) {
         this.ativo = ativo;
     }
 
