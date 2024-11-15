@@ -5,11 +5,11 @@ public class Usuario {
     private String nome;
     private String email;
     private int pontos;
-    private boolean admin;
+    private String admin;
 
     public Usuario(){}
 
-    public Usuario(int id, String nome, String email, int pontos, boolean admin) {
+    public Usuario(int id, String nome, String email, int pontos, String admin) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -49,11 +49,11 @@ public class Usuario {
         this.pontos = pontos;
     }
 
-    public boolean isAdmin() {
+    public String isAdmin() {
         return admin;
     }
 
-    public void setAdmin(boolean admin) {
+    public void setAdmin(String admin) {
         this.admin = admin;
     }
 
