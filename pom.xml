@@ -1,11 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>fiap.tds</groupId>
     <artifactId>first-api-java</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>first-api-java</name>
 
@@ -14,7 +12,7 @@
             <dependency>
                 <groupId>org.glassfish.jersey</groupId>
                 <artifactId>jersey-bom</artifactId>
-                <version>${jersey.version}</version>
+                <version>3.1.1</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -22,6 +20,7 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Jersey dependencies -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-grizzly2-http</artifactId>
@@ -30,26 +29,28 @@
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
         </dependency>
-
-        <!-- uncomment this to get JSON support: -->
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit-jupiter.version}</version>
-            <scope>test</scope>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
         </dependency>
 
+        <!-- Jakarta Servlet API -->
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>19.8.0.0</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
+        <!-- JSON Web Token -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -61,46 +62,56 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId> <!-- Usado para processamento JSON -->
+            <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Oracle JDBC -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>19.8.0.0</version>
+        </dependency>
 
+        <!-- JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
-                <inherited>true</inherited>
                 <configuration>
                     <source>21</source>
                     <target>21</target>
                 </configuration>
             </plugin>
+            <!-- WAR Plugin -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
                 <configuration>
-                    <mainClass>fiap.tds.Main</mainClass>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
+            <!-- Surefire Plugin for JUnit 5 -->
             <plugin>
-                <!-- Surefire support for JUnit-5 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.1</version>
@@ -109,9 +120,6 @@
     </build>
 
     <properties>
-        <jersey.version>4.0.0-M1</jersey.version>
-        <junit-jupiter.version>5.10.1</junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <surefire.mvn.plugin.version>3.2.1</surefire.mvn.plugin.version>
     </properties>
 </project>

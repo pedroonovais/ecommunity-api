@@ -45,6 +45,12 @@ public class LocalResource {
         }
     }
 
+    public List<Local> getAllLocais2() {
+        List<Local> locais = dao.selectAll();
+
+        return locais;
+    }
+
     @Path("/inserir")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
