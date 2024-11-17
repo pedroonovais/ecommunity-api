@@ -60,13 +60,14 @@ public class MateriaDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Materia(
-                        rs.getInt("ID_MATERIA"),
-                        rs.getInt("ID_USUARIO"),
-                        rs.getString("TITULO_MATERIA"),
-                        rs.getString("TEXTO_MATERIA"),
-                        rs.getString("ATIVO"),
-                        rs.getTimestamp("DT_CRIACAO").toLocalDateTime(),
-                        rs.getTimestamp("DT_UPDATE").toLocalDateTime()
+                    rs.getInt("ID_MATERIA"),
+                    rs.getInt("ID_USUARIO"),
+                    rs.getString("TITULO_MATERIA"),
+                    rs.getString("TEXTO_MATERIA"),
+                    rs.getString("ATIVO"),
+                    rs.getTimestamp("DT_CRIACAO").toLocalDateTime(),
+                    rs.getTimestamp("DT_UPDATE").toLocalDateTime(),
+                    rs.getString("IMG_CAPA")
                 );
             }
         } catch (SQLException e) {
@@ -82,13 +83,14 @@ public class MateriaDAO {
         try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 materias.add(new Materia(
-                        rs.getInt("ID_MATERIA"),
-                        rs.getInt("ID_USUARIO"),
-                        rs.getString("TITULO_MATERIA"),
-                        rs.getString("TEXTO_MATERIA"),
-                        rs.getString("ATIVO"),  // Retorna o valor de ATIVO diretamente como String
-                        rs.getTimestamp("DT_CRIACAO").toLocalDateTime(),
-                        rs.getTimestamp("DT_UPDATE").toLocalDateTime()
+                    rs.getInt("ID_MATERIA"),
+                    rs.getInt("ID_USUARIO"),
+                    rs.getString("TITULO_MATERIA"),
+                    rs.getString("TEXTO_MATERIA"),
+                    rs.getString("ATIVO"),
+                    rs.getTimestamp("DT_CRIACAO").toLocalDateTime(),
+                    rs.getTimestamp("DT_UPDATE").toLocalDateTime(),
+                        rs.getString("IMG_CAPA")
                 ));
             }
         } catch (SQLException e) {

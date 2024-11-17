@@ -24,6 +24,7 @@ public class MateriaResource {
             response.put("msg", "Nenhuma matéria encontrada");
             return Response.status(Response.Status.NOT_FOUND).entity(response).build();
         } else {
+            System.out.println("Chegando aqui");
             List<Map<String, String>> responseList = new ArrayList<>();
 
             for (Materia materia : materias) {
@@ -36,6 +37,7 @@ public class MateriaResource {
                 response.put("ativo", String.valueOf(materia.isAtivo()));
                 response.put("dtCriacao", materia.getDtCriacao().toString());
                 response.put("dtUpdate", materia.getDtUpdate().toString());
+                response.put("imagem", materia.getImagem());
                 responseList.add(response);
             }
 

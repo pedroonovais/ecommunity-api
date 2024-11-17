@@ -11,11 +11,13 @@ public class Materia {
     private LocalDateTime dtCriacao;
     private LocalDateTime dtUpdate;
 
+    private String imagem;
+
     // Construtor padrão
     public Materia() {}
 
     // Construtor com parâmetros
-    public Materia(int idMateria, int idUsuario, String tituloMateria, String textoMateria, String ativo, LocalDateTime dtCriacao, LocalDateTime dtUpdate) {
+    public Materia(int idMateria, int idUsuario, String tituloMateria, String textoMateria, String ativo, LocalDateTime dtCriacao, LocalDateTime dtUpdate, String imagem) {
         this.idMateria = idMateria;
         this.idUsuario = idUsuario;
         this.tituloMateria = tituloMateria;
@@ -23,6 +25,7 @@ public class Materia {
         this.ativo = ativo;
         this.dtCriacao = dtCriacao;
         this.dtUpdate = dtUpdate;
+        this.imagem = imagem;
     }
 
     // Getters e Setters
@@ -82,16 +85,25 @@ public class Materia {
         this.dtUpdate = dtUpdate;
     }
 
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
     @Override
     public String toString() {
         return "Materia{" +
-                "idMateria=" + idMateria +
-                ", idUsuario=" + idUsuario +
-                ", tituloMateria='" + tituloMateria + '\'' +
-                ", textoMateria='" + textoMateria + '\'' +
-                ", ativo=" + ativo +
-                ", dtCriacao=" + dtCriacao +
-                ", dtUpdate=" + dtUpdate +
-                '}';
+            "idMateria=" + idMateria +
+            ", idUsuario=" + idUsuario +
+            ", tituloMateria='" + tituloMateria + '\'' +
+            ", textoMateria='" + textoMateria + '\'' +
+            ", ativo='" + ativo + '\'' +
+            ", dtCriacao=" + dtCriacao +
+            ", dtUpdate=" + dtUpdate +
+            ", imagem='" + imagem + '\'' +
+            '}';
     }
 }
