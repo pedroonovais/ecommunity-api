@@ -1,6 +1,7 @@
 package fiap.tds.model.dao;
 
 import fiap.tds.model.vo.Usuario;
+import fiap.tds.resource.UsuarioResource;
 import fiap.tds.util.DatabaseConnection;
 
 import java.sql.*;
@@ -129,5 +130,31 @@ public class UsuarioDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Usuario login(String login, String senha) {
+        String sql = "SELECT *\n" +
+                "FROM TB_USUARIO U\n" +
+                "INNER JOIN TB_LOGIN_USUARIO LU\n" +
+                "ON U.ID_USUARIO = LU.ID_USUARIO\n" +
+                "WHERE LOGIN_USUARIO = ?\n" +
+                "AND SENHA = ?";
+        try (Connection connection = getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, login);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Usuario(
+                    rs.getInt("ID_USUARIO"),
+                    rs.getString("NOME_USUARIO"),
+                    rs.getString("EMAIL_USUARIO"),
+                    rs.getInt("QTD_PONTOS"),
+                    rs.getString("ADMIN")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

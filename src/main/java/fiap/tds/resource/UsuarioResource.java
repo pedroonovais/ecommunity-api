@@ -1,6 +1,8 @@
 package fiap.tds.resource;
 
+import fiap.tds.model.bo.UsuarioBO;
 import fiap.tds.model.dao.UsuarioDAO;
+import fiap.tds.model.vo.Credenciais;
 import fiap.tds.model.vo.Usuario;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -15,6 +17,7 @@ import java.util.Map;
 public class UsuarioResource {
 
     private UsuarioDAO dao = new UsuarioDAO();
+    private UsuarioBO bo = new UsuarioBO();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,6 +78,25 @@ public class UsuarioResource {
             response.put("status", "error");
             response.put("msg", "Não foi possível inserir o usuário");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
+        }
+    }
+
+    @Path("/login")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response login(Credenciais credenciais) {
+        Usuario usuario = dao.login(credenciais.getLogin(), credenciais.getSenha());
+
+        Map<String, String> response = new HashMap<>();
+        if (usuario != null && bo.verificaUsuarioAdmin(usuario)) {
+            String token = bo.gerarTokenLogin(usuario);
+            response.put("status", "success");
+            response.put("token", token);
+            return Response.ok(response).build();
+        } else {
+            response.put("status", "error");
+            response.put("msg", "Não autorizado");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(response).build();
         }
     }
 
