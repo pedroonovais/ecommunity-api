@@ -1,5 +1,6 @@
 package fiap.tds.resource;
 
+import fiap.tds.model.bo.LocalBO;
 import fiap.tds.model.dao.LocalDAO;
 import fiap.tds.model.vo.Local;
 import jakarta.ws.rs.*;
@@ -12,6 +13,7 @@ import java.util.*;
 public class LocalResource {
 
     private LocalDAO dao = new LocalDAO();
+    private LocalBO bo = new LocalBO();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,19 +47,20 @@ public class LocalResource {
         }
     }
 
-    public List<Local> getAllLocais2() {
-        List<Local> locais = dao.selectAll();
-
-        return locais;
-    }
-
     @Path("/inserir")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertLocal(Local local){
+        Map<String, String> response = new HashMap<>();
+
+        if (!bo.isValido(local)){
+            response.put("status", "error");
+            response.put("msg", "Dados inválidos para o local. Verifique os campos obrigatórios e as coordenadas.");
+            return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+        }
+
         int idLocal = dao.insert(local);
 
-        Map<String, String> response = new HashMap<>();
         if (idLocal > 0){
             response.put("status", "success");
             response.put("id", String.valueOf(idLocal));

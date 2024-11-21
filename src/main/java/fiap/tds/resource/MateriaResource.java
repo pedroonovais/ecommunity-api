@@ -1,5 +1,6 @@
 package fiap.tds.resource;
 
+import fiap.tds.model.bo.MateriaBO;
 import fiap.tds.model.dao.MateriaDAO;
 import fiap.tds.model.vo.Materia;
 import jakarta.ws.rs.*;
@@ -12,6 +13,7 @@ import java.util.*;
 public class MateriaResource {
 
     private MateriaDAO dao = new MateriaDAO();
+    private MateriaBO bo = new MateriaBO();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,9 +50,16 @@ public class MateriaResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertMateria(Materia materia) {
+        Map<String, String> response = new HashMap<>();
+
+        if (!bo.materiaValida(materia)){
+            response.put("status", "error");
+            response.put("msg", "Dados inválidos para a matéria. Verifique os campos obrigatórios, o status e as datas.");
+            return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
+        }
+
         int idMateria = dao.insert(materia);
 
-        Map<String, String> response = new HashMap<>();
         if (idMateria > 0) {
             response.put("status", "success");
             response.put("id", String.valueOf(idMateria));
